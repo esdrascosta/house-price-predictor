@@ -9,14 +9,14 @@ class LinearRegression {
                       numInter: Int): (DenseMatrix[Double], DenseVector[Double]) = {
 
     val costHistory = DenseVector.zeros[Double](numInter)
-    val m = y.size
+    val m = y.rows
     var _theta = theta
 
     for( i <- 0 until numInter) {
 
       val a = alpha/m
       val H = X * _theta - y
-      _theta = _theta - ( a * X.t * H )
+      _theta -= a * X.t * H
 
       costHistory(i) = computeCost(X, y, _theta)
     }
@@ -28,12 +28,10 @@ class LinearRegression {
                   y: DenseMatrix[Double],
                   theta: DenseMatrix[Double] ) = {
 
-    val m = y.size
+    val m = y.rows
     val H = X * theta - y
     val b = 1.0 / ( 2.0 * m )
     val cost: DenseMatrix[Double] = b *  H.t * H
     sum(cost)
   }
-
-
 }
