@@ -1,4 +1,4 @@
-import breeze.linalg.{DenseMatrix, DenseVector, sum}
+import breeze.linalg.{DenseMatrix, DenseVector, min, sum}
 
 class LinearRegression {
 
@@ -14,9 +14,7 @@ class LinearRegression {
 
     for( i <- 0 until numInter) {
 
-      val a = alpha/m
-      val H = X * _theta - y
-      _theta -= a * X.t * H
+      _theta -=  alpha/m * X.t * (X * _theta - y)
 
       costHistory(i) = computeCost(X, y, _theta)
     }
@@ -30,8 +28,8 @@ class LinearRegression {
 
     val m = y.rows
     val H = X * theta - y
-    val b = 1.0 / ( 2.0 * m )
-    val cost: DenseMatrix[Double] = b *  H.t * H
-    sum(cost)
+    val b = 1.0 / 2.0 * m
+    val cost = b *  H.t * H
+    cost(0,0)
   }
 }
